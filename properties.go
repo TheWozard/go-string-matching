@@ -1,137 +1,144 @@
 package matcher
 
+import (
+	"unicode/utf8"
+)
+
 var (
-	ASCIIBaseline = ASCIIOffsetLookup{
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' ', Ignorable: true},
-		{Equality: ' '},
-		{Equality: '!'},
-		{Equality: '"'},
-		{Equality: '#'},
-		{Equality: '$'},
-		{Equality: '%'},
-		{Equality: '&'},
-		{Equality: '\''},
-		{Equality: '('},
-		{Equality: ')'},
-		{Equality: '*'},
-		{Equality: '+'},
-		{Equality: ','},
-		{Equality: '-'},
-		{Equality: '.'},
-		{Equality: '/'},
-		{Equality: '0'},
-		{Equality: '1'},
-		{Equality: '2'},
-		{Equality: '3'},
-		{Equality: '4'},
-		{Equality: '5'},
-		{Equality: '6'},
-		{Equality: '7'},
-		{Equality: '8'},
-		{Equality: '9'},
-		{Equality: ':'},
-		{Equality: ';'},
-		{Equality: '<'},
-		{Equality: '='},
-		{Equality: '>'},
-		{Equality: '?'},
-		{Equality: '@'},
-		{Equality: 'A'},
-		{Equality: 'B'},
-		{Equality: 'C'},
-		{Equality: 'D'},
-		{Equality: 'E'},
-		{Equality: 'F'},
-		{Equality: 'G'},
-		{Equality: 'H'},
-		{Equality: 'I'},
-		{Equality: 'J'},
-		{Equality: 'K'},
-		{Equality: 'L'},
-		{Equality: 'M'},
-		{Equality: 'N'},
-		{Equality: 'O'},
-		{Equality: 'P'},
-		{Equality: 'Q'},
-		{Equality: 'R'},
-		{Equality: 'S'},
-		{Equality: 'T'},
-		{Equality: 'U'},
-		{Equality: 'V'},
-		{Equality: 'W'},
-		{Equality: 'X'},
-		{Equality: 'Y'},
-		{Equality: 'Z'},
-		{Equality: '['},
-		{Equality: '\\'},
-		{Equality: ']'},
-		{Equality: '^'},
-		{Equality: '_'},
-		{Equality: '`'},
-		{Equality: 'a'},
-		{Equality: 'b'},
-		{Equality: 'c'},
-		{Equality: 'd'},
-		{Equality: 'e'},
-		{Equality: 'f'},
-		{Equality: 'g'},
-		{Equality: 'h'},
-		{Equality: 'i'},
-		{Equality: 'j'},
-		{Equality: 'k'},
-		{Equality: 'l'},
-		{Equality: 'm'},
-		{Equality: 'n'},
-		{Equality: 'o'},
-		{Equality: 'p'},
-		{Equality: 'q'},
-		{Equality: 'r'},
-		{Equality: 's'},
-		{Equality: 't'},
-		{Equality: 'u'},
-		{Equality: 'v'},
-		{Equality: 'w'},
-		{Equality: 'x'},
-		{Equality: 'y'},
-		{Equality: 'z'},
-		{Equality: '{'},
-		{Equality: '|'},
-		{Equality: '}'},
-		{Equality: '~'},
+	Baseline = PropertiesLookup{
+		ASCII: []Properties{
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' ', Ignorable: true},
+			{Equality: ' '},
+			{Equality: '!'},
+			{Equality: '"'},
+			{Equality: '#'},
+			{Equality: '$'},
+			{Equality: '%'},
+			{Equality: '&'},
+			{Equality: '\''},
+			{Equality: '('},
+			{Equality: ')'},
+			{Equality: '*'},
+			{Equality: '+'},
+			{Equality: ','},
+			{Equality: '-'},
+			{Equality: '.'},
+			{Equality: '/'},
+			{Equality: '0'},
+			{Equality: '1'},
+			{Equality: '2'},
+			{Equality: '3'},
+			{Equality: '4'},
+			{Equality: '5'},
+			{Equality: '6'},
+			{Equality: '7'},
+			{Equality: '8'},
+			{Equality: '9'},
+			{Equality: ':'},
+			{Equality: ';'},
+			{Equality: '<'},
+			{Equality: '='},
+			{Equality: '>'},
+			{Equality: '?'},
+			{Equality: '@'},
+			{Equality: 'A'},
+			{Equality: 'B'},
+			{Equality: 'C'},
+			{Equality: 'D'},
+			{Equality: 'E'},
+			{Equality: 'F'},
+			{Equality: 'G'},
+			{Equality: 'H'},
+			{Equality: 'I'},
+			{Equality: 'J'},
+			{Equality: 'K'},
+			{Equality: 'L'},
+			{Equality: 'M'},
+			{Equality: 'N'},
+			{Equality: 'O'},
+			{Equality: 'P'},
+			{Equality: 'Q'},
+			{Equality: 'R'},
+			{Equality: 'S'},
+			{Equality: 'T'},
+			{Equality: 'U'},
+			{Equality: 'V'},
+			{Equality: 'W'},
+			{Equality: 'X'},
+			{Equality: 'Y'},
+			{Equality: 'Z'},
+			{Equality: '['},
+			{Equality: '\\'},
+			{Equality: ']'},
+			{Equality: '^'},
+			{Equality: '_'},
+			{Equality: '`'},
+			{Equality: 'a'},
+			{Equality: 'b'},
+			{Equality: 'c'},
+			{Equality: 'd'},
+			{Equality: 'e'},
+			{Equality: 'f'},
+			{Equality: 'g'},
+			{Equality: 'h'},
+			{Equality: 'i'},
+			{Equality: 'j'},
+			{Equality: 'k'},
+			{Equality: 'l'},
+			{Equality: 'm'},
+			{Equality: 'n'},
+			{Equality: 'o'},
+			{Equality: 'p'},
+			{Equality: 'q'},
+			{Equality: 'r'},
+			{Equality: 's'},
+			{Equality: 't'},
+			{Equality: 'u'},
+			{Equality: 'v'},
+			{Equality: 'w'},
+			{Equality: 'x'},
+			{Equality: 'y'},
+			{Equality: 'z'},
+			{Equality: '{'},
+			{Equality: '|'},
+			{Equality: '}'},
+			{Equality: '~'},
+		},
+		Unicode: map[rune]Properties{},
 	}
 
-	ASCIICaseInsensitive = ASCIIBaseline.Copy().SetEquality(map[rune]rune{
+	CaseInsensitive = Baseline.Copy().SetEquality(map[rune]rune{
 		'A': 'a',
 		'B': 'b',
 		'C': 'c',
@@ -159,49 +166,84 @@ var (
 		'Y': 'y',
 		'Z': 'z',
 	})
+
+	CaseInsensitiveAndSymbolInsensitive = CaseInsensitive.Copy().SetIgnorable([]rune{
+		' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~',
+	}, true)
 )
 
-type CharacterProperties struct {
+// Properties defines how a given rune should be treated.
+type Properties struct {
 	Equality  rune
 	Ignorable bool
 }
 
-type ASCIIOffsetLookup []CharacterProperties
+// PropertiesLookup supports methods for looking up properties and defining properties of runes.
+type PropertiesLookup struct {
+	ASCII   []Properties
+	Unicode map[rune]Properties
+}
 
-func (alm ASCIIOffsetLookup) Matcher() Matcher {
+// Matcher converts this PropertiesLookup into a Matcher.
+func (alm PropertiesLookup) Matcher() Matcher {
 	return Matcher{Lookup: alm}
 }
 
-func (alm ASCIIOffsetLookup) Lookup(value rune) CharacterProperties {
-	if value > '~' {
-		return CharacterProperties{Equality: value, Ignorable: false}
+func (alm PropertiesLookup) LookupRune(value rune) Properties {
+	if value < utf8.RuneSelf {
+		return alm.ASCII[value]
 	}
-	return alm[value]
+	if properties, ok := alm.Unicode[value]; ok {
+		return properties
+	}
+	return Properties{Equality: value, Ignorable: false}
 }
 
-func (alm ASCIIOffsetLookup) Copy() ASCIIOffsetLookup {
-	result := make(ASCIIOffsetLookup, len(alm))
-	copy(result, alm)
+func (alm PropertiesLookup) LookupNextRune(str string, index int) (Properties, int) {
+	value, size := utf8.DecodeRuneInString(str[index:])
+	if size == 0 {
+		return Properties{Equality: -1, Ignorable: true}, index
+	}
+	return alm.LookupRune(value), size + index
+}
+
+func (alm PropertiesLookup) Copy() PropertiesLookup {
+	result := PropertiesLookup{
+		ASCII:   make([]Properties, len(alm.ASCII)),
+		Unicode: make(map[rune]Properties, len(alm.Unicode)),
+	}
+	copy(result.ASCII, alm.ASCII)
+	for key, value := range alm.Unicode {
+		result.Unicode[key] = value
+	}
 	return result
 }
 
-func (alm ASCIIOffsetLookup) SetEquality(updates map[rune]rune) ASCIIOffsetLookup {
+func (alm PropertiesLookup) SetEquality(updates map[rune]rune) PropertiesLookup {
 	for base, value := range updates {
-		alm[base].Equality = value
+		if base < utf8.RuneSelf {
+			alm.ASCII[base].Equality = value
+		} else {
+			prev := alm.Unicode[base]
+			prev.Equality = value
+			alm.Unicode[base] = prev
+		}
 	}
 	return alm
 }
 
-func (alm ASCIIOffsetLookup) SetIgnorable(updates []rune) ASCIIOffsetLookup {
-	for base := range updates {
-		alm[base].Ignorable = true
-	}
-	return alm
-}
-
-func (alm ASCIIOffsetLookup) SetNotIgnorable(updates []rune) ASCIIOffsetLookup {
-	for base := range updates {
-		alm[base].Ignorable = false
+func (alm PropertiesLookup) SetIgnorable(updates []rune, value bool) PropertiesLookup {
+	for _, base := range updates {
+		if base < utf8.RuneSelf {
+			alm.ASCII[base].Ignorable = true
+		} else {
+			prev, ok := alm.Unicode[base]
+			if !ok {
+				prev = Properties{Equality: base}
+			}
+			prev.Ignorable = value
+			alm.Unicode[base] = prev
+		}
 	}
 	return alm
 }
