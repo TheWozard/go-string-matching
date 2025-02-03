@@ -167,7 +167,40 @@ var (
 		'Z': 'z',
 	})
 
-	CaseInsensitiveAndSymbolInsensitive = CaseInsensitive.Copy().SetIgnorable([]rune{
+	CaseInsensitiveAndSymbolInsensitive = CaseInsensitive.Copy().SetEquality(map[rune]rune{
+		'!':  ' ',
+		'"':  ' ',
+		'#':  ' ',
+		'$':  ' ',
+		'%':  ' ',
+		'&':  ' ',
+		'\'': ' ',
+		'(':  ' ',
+		')':  ' ',
+		'*':  ' ',
+		'+':  ' ',
+		',':  ' ',
+		'-':  ' ',
+		'.':  ' ',
+		'/':  ' ',
+		':':  ' ',
+		';':  ' ',
+		'<':  ' ',
+		'=':  ' ',
+		'>':  ' ',
+		'?':  ' ',
+		'@':  ' ',
+		'[':  ' ',
+		'\\': ' ',
+		']':  ' ',
+		'^':  ' ',
+		'_':  ' ',
+		'`':  ' ',
+		'{':  ' ',
+		'|':  ' ',
+		'}':  ' ',
+		'~':  ' ',
+	}).SetIgnorable([]rune{
 		' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~',
 	}, true)
 )
@@ -205,6 +238,14 @@ func (alm PropertiesLookup) LookupNextRune(str string, index int) (Properties, i
 		return Properties{Equality: -1, Ignorable: true}, index
 	}
 	return alm.LookupRune(value), size + index
+}
+
+func (alm PropertiesLookup) LookupPreviousRune(str string, index int) (Properties, int) {
+	value, size := utf8.DecodeLastRuneInString(str[:index])
+	if size == 0 {
+		return Properties{Equality: -1, Ignorable: true}, index
+	}
+	return alm.LookupRune(value), index - size
 }
 
 func (alm PropertiesLookup) Copy() PropertiesLookup {

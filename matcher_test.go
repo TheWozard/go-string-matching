@@ -27,6 +27,14 @@ func BenchmarkEquality(b *testing.B) {
 		}
 	})
 
+	// Ours
+	b.Run("Contains", func(b *testing.B) {
+		CaseInsensitive := matcher.CaseInsensitive.Matcher()
+		for i := 0; i < b.N; i++ {
+			assert.True(b, CaseInsensitive.Contains(pattern, value))
+		}
+	})
+
 	// Slower common naive approach. Does not support all features needed.
 	b.Run("ToLower", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
